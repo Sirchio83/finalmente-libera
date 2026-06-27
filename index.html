@@ -348,8 +348,15 @@
             overflow: hidden;
             box-shadow: 0 4px 32px rgba(0,0,0,0.09);
         }
+        .profile-img-wrap {
+            width: 100%; height: 240px; overflow: hidden; position: relative;
+        }
+        .profile-img-wrap img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center top;
+            display: block;
+        }
         .profile-header {
-            padding: 44px 28px 36px;
+            padding: 28px 28px 36px;
             text-align: center; color: white;
             position: relative;
         }
@@ -360,7 +367,7 @@
             height: 40px; background: white;
             border-radius: 50% 50% 0 0 / 24px 24px 0 0;
         }
-        .p-emoji { font-size: 72px; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .p-emoji { font-size: 48px; margin-bottom: 8px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
         .p-you { font-size: 13px; font-weight: 500; opacity: 0.8; margin-bottom: 4px; }
         .p-name { font-family: 'Playfair Display', serif; font-size: clamp(28px, 7vw, 42px); margin-bottom: 8px; }
         .p-tagline { font-size: 15px; font-style: italic; opacity: 0.88; }
@@ -609,6 +616,7 @@ const questions = [
 const profiles = {
     V: {
         name: 'La Vitalista', emoji: '🌿', tagline: 'Ti muovi, quindi sei.',
+        img: 'profile-vitalista.jpg',
         color: '#3D9E6A', colorCta: '#2E7A52',
         desc: 'Il tuo corpo sa già che la pensione non significa fermarsi — anzi. Yoga, passeggiate veloci, danza: non come routine obbligatoria, ma perché ti fa sentire viva. Hai un\'energia che molte 30enni si sognano, e finalmente puoi usarla tutta per te, nei tuoi tempi.',
         ideas: [
@@ -619,6 +627,7 @@ const profiles = {
     },
     C: {
         name: 'La Creativa', emoji: '🎨', tagline: 'Fai cose belle, quindi sei.',
+        img: 'profile-creativa.jpg',
         color: '#C4873A', colorCta: '#A06A22',
         desc: 'Hai le mani che pensano da sole. Cucire, dipingere, creare qualcosa dal niente — è il tuo modo autentico di stare nel mondo. La pensione è il tuo studio personale, finalmente aperto 24/7 senza orari, senza riunioni, senza nessuno che ti dice cosa fare.',
         ideas: [
@@ -629,6 +638,7 @@ const profiles = {
     },
     A: {
         name: 'L\'Avventuriera', emoji: '🌍', tagline: 'Esplori, quindi sei.',
+        img: 'profile-avventuriera.jpg',
         color: '#3A6FD4', colorCta: '#2A55AA',
         desc: 'La mappa ti chiama — e non deve essere lontano. Un borgo mai visitato, un mercato nuovo, un museo rimandato da vent\'anni. Per te ogni giornata può essere una piccola scoperta, e la pensione è finalmente il momento in cui le mappe si aprono davvero senza scuse.',
         ideas: [
@@ -639,6 +649,7 @@ const profiles = {
     },
     K: {
         name: 'La Connettrice', emoji: '💬', tagline: 'Connetti, quindi sei.',
+        img: 'profile-connettrice.jpg',
         color: '#CC3311', colorCta: '#A82A0D',
         desc: 'La tua energia arriva dalle persone. Un caffè con le amiche, una telefonata inaspettata, un gesto di gentilezza verso qualcuna. Sei il collante del tuo mondo, e in pensione puoi finalmente scegliere chi far entrare nella tua cerchia — senza compromessi né colleghe difficili.',
         ideas: [
@@ -649,6 +660,7 @@ const profiles = {
     },
     Z: {
         name: 'La Contemplativa', emoji: '🕊️', tagline: 'Ti fermi, quindi sei.',
+        img: 'profile-contemplativa.jpg',
         color: '#7A5FD4', colorCta: '#5E44B0',
         desc: 'Hai aspettato una vita per stare ferma senza sensi di colpa. Leggere, meditare, guardare fuori dalla finestra con un tè caldo — per te è un lusso meritato, non pigrizia. Hai una saggezza silenziosa rara, e finalmente puoi darle tutto lo spazio che merita.',
         ideas: [
@@ -773,6 +785,7 @@ function showResult(name) {
 
     document.getElementById('profile-card-container').innerHTML =
         '<div class="profile-card">' +
+        '<div class="profile-img-wrap"><img src="' + p.img + '" alt="' + p.name + '"></div>' +
         '<div class="profile-header" style="background: linear-gradient(145deg, ' + p.color + ', ' + p.colorCta + ');">' +
         '<div class="p-emoji">' + p.emoji + '</div>' +
         '<div class="p-you">' + youLabel + '</div>' +
