@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Che tipo di pensionata sei? — Finalmente Libera</title>
+    <meta name="description" content="7 domande per scoprire il tuo profilo di pensionata ideale. Gratis, veloce, divertente. Ricevi le tue idee personalizzate via email!">
+    <meta property="og:title" content="Che tipo di pensionata sei? Scoprilo in 2 minuti">
+    <meta property="og:description" content="7 domande, 5 profili, un sacco di idee. Test gratuito dal libro Finalmente Libera.">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --red:     #CC3311;
+            --red-d:   #A82A0D;
+            --red-l:   #E04422;
+            --cream:   #FFF8F0;
+            --cream-d: #F0E6D8;
+            --text:    #2A2A2A;
+            --muted:   #6B6B6B;
+            --light:   #AAAAAA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── SCREENS ── */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .anim { animation: fadeUp 0.4s ease both; }
+
+        /* ══ SCREEN 0 — WELCOME ══ */
+        #screen-welcome {
+            min-height: 100vh;
+            background: linear-gradient(160deg, var(--red-l) 0%, var(--red) 45%, var(--red-d) 80%, #8A1F07 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        #screen-welcome.active { display: flex; }
+        #screen-welcome::before {
+            content: '';
+            position: absolute;
+            top: -120px; right: -120px;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            pointer-events: none;
+        }
+        #screen-welcome::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -80px;
+            width: 280px; height: 280px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            pointer-events: none;
+        }
+
+        .welcome-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 18px;
+            border-radius: 20px;
+            margin-bottom: 36px;
+        }
+
+        /* 3D Book */
+        .book-wrap {
+            perspective: 900px;
+            margin-bottom: 40px;
+        }
+        .book-3d {
+            width: 160px;
+            height: 220px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateY(-25deg);
+            filter: drop-shadow(0 24px 40px rgba(0,0,0,0.45));
+            transition: transform 0.4s ease;
+        }
+        .book-3d:hover { transform: rotateY(-10deg); }
+        .book-front {
+            width: 160px;
+            height: 220px;
+            position: absolute;
+            border-radius: 2px 6px 6px 2px;
+            overflow: hidden;
+            background: var(--cream);
+        }
+        .book-front img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
+        .book-front-fallback {
+            width: 100%; height: 100%;
+            background: linear-gradient(180deg, var(--cream) 0%, #F5EDE0 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 12px 12px;
+        }
+        .book-top-bar {
+            width: 100%;
+            background: var(--red);
+            border-radius: 2px;
+            padding: 5px 8px;
+            text-align: center;
+        }
+        .book-top-bar span {
+            font-size: 7px; font-weight: 700; color: white;
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .book-title-area {
+            text-align: center; flex: 1;
+            display: flex; flex-direction: column;
+            justify-content: center; gap: 4px;
+        }
+        .book-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px; font-weight: 700;
+            color: var(--red); line-height: 1;
+        }
+        .book-num-label { font-size: 6px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .book-title-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 11px; font-weight: 700;
+            color: var(--red); line-height: 1.3;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .book-title-sub { font-size: 6px; color: #555; line-height: 1.5; }
+        .book-author { font-size: 7px; color: #666; font-style: italic; }
+        .book-spine {
+            width: 20px; height: 220px;
+            position: absolute; left: -20px; top: 0;
+            background: linear-gradient(90deg, #8A1F07, var(--red-d));
+            border-radius: 2px 0 0 2px;
+            transform: rotateY(-90deg);
+            transform-origin: right center;
+        }
+        .book-shadow {
+            position: absolute;
+            bottom: -16px; left: 10px; right: -10px;
+            height: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        .welcome-h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 7vw, 50px);
+            color: white;
+            text-align: center;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+        .welcome-h1 em { font-style: italic; }
+        .welcome-sub {
+            font-size: clamp(14px, 2.5vw, 17px);
+            color: rgba(255,255,255,0.85);
+            text-align: center;
+            line-height: 1.7;
+            max-width: 440px;
+            margin-bottom: 40px;
+        }
+        .btn-start {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: var(--red);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px; font-weight: 700;
+            padding: 16px 44px;
+            border-radius: 50px;
+            border: none; cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,0.3); }
+        .welcome-meta {
+            margin-top: 22px;
+            display: flex; gap: 20px;
+            align-items: center; justify-content: center;
+            flex-wrap: wrap;
+        }
+        .welcome-meta span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        /* ══ QUIZ HEADER (shared) ══ */
+        .quiz-header {
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-d) 100%);
+            padding: 20px 24px 26px;
+        }
+        .quiz-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .quiz-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+        }
+        .step-badge {
+            background: rgba(255,255,255,0.18);
+            color: white; font-size: 11px; font-weight: 600;
+            padding: 3px 12px; border-radius: 20px; letter-spacing: 0.5px;
+        }
+        .progress-bar { height: 5px; background: rgba(255,255,255,0.25); border-radius: 3px; overflow: hidden; }
+        .progress-fill {
+            height: 100%; background: white; border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* ══ CONTAINER ══ */
+        .container {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 28px 20px 80px;
+        }
+
+        /* ══ QUESTION CARD ══ */
+        .q-card {
+            background: white; border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+        }
+        .q-emoji { font-size: 36px; margin-bottom: 8px; }
+        .q-num {
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--red); margin-bottom: 8px;
+        }
+        .q-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(16px, 3.5vw, 20px);
+            line-height: 1.4; color: #1A1A1A; margin-bottom: 22px;
+        }
+        .options { display: flex; flex-direction: column; gap: 8px; }
+        .option {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 13px 16px;
+            border: 2px solid var(--cream-d);
+            border-radius: 12px; cursor: pointer;
+            background: white; text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; color: var(--text); line-height: 1.45;
+            transition: border-color 0.15s, background 0.15s;
+            width: 100%;
+        }
+        .option:hover { border-color: var(--red); background: #FFF5F3; }
+        .option.selected { border-color: var(--red); background: #FFF0EC; }
+        .opt-letter {
+            min-width: 26px; height: 26px;
+            background: var(--cream-d); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; color: var(--muted);
+            transition: background 0.15s, color 0.15s;
+            flex-shrink: 0; margin-top: 1px;
+        }
+        .option.selected .opt-letter { background: var(--red); color: white; }
+        .next-btn {
+            display: none;
+            margin-top: 18px; width: 100%;
+            background: var(--red); color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px; font-weight: 600;
+            padding: 14px; border-radius: 12px;
+            border: none; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .next-btn:hover { background: var(--red-d); }
+
+        /* ══ EMAIL GATE ══ */
+        .gate-box {
+            background: white; border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .gate-emoji { font-size: 60px; margin-bottom: 16px; }
+        .gate-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(22px, 4vw, 30px);
+            margin-bottom: 12px; line-height: 1.3; color: #1A1A1A;
+        }
+        .gate-box > p {
+            font-size: 15px; color: var(--muted);
+            line-height: 1.65; max-width: 370px;
+            margin: 0 auto 28px;
+        }
+        .email-form {
+            display: flex; flex-direction: column; gap: 11px;
+            max-width: 370px; margin: 0 auto;
+        }
+        .email-form input {
+            padding: 14px 17px;
+            border: 2px solid var(--cream-d);
+            border-radius: 12px; font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none; transition: border-color 0.2s;
+            color: var(--text); background: white;
+        }
+        .email-form input:focus { border-color: var(--red); }
+        .email-form input::placeholder { color: var(--light); }
+        .btn-submit {
+            background: var(--red); color: white;
+            border: none; padding: 15px; border-radius: 12px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover { background: var(--red-d); }
+        .privacy { font-size: 12px; color: var(--light); margin-top: 10px; }
+
+        /* ══ PROFILE RESULT ══ */
+        .profile-card {
+            background: white; border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.09);
+        }
+        .profile-header {
+            padding: 44px 28px 36px;
+            text-align: center; color: white;
+            position: relative;
+        }
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 40px; background: white;
+            border-radius: 50% 50% 0 0 / 24px 24px 0 0;
+        }
+        .p-emoji { font-size: 72px; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+        .p-you { font-size: 13px; font-weight: 500; opacity: 0.8; margin-bottom: 4px; }
+        .p-name { font-family: 'Playfair Display', serif; font-size: clamp(28px, 7vw, 42px); margin-bottom: 8px; }
+        .p-tagline { font-size: 15px; font-style: italic; opacity: 0.88; }
+        .profile-body { padding: 28px 28px 32px; }
+        .p-desc { font-size: 15px; line-height: 1.75; color: #3A3A3A; margin-bottom: 28px; }
+        .p-ideas-label {
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 14px;
+        }
+        .ideas-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 28px; }
+        .idea-row {
+            display: flex; align-items: flex-start; gap: 10px;
+            background: var(--cream); padding: 12px 14px;
+            border-radius: 10px; font-size: 14px;
+            color: var(--text); line-height: 1.45;
+        }
+        .idea-row .i-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+        .book-cta {
+            border-radius: 16px; padding: 22px 24px; text-align: center;
+        }
+        .book-cta p { font-size: 14px; color: white; opacity: 0.9; margin-bottom: 14px; line-height: 1.5; }
+        .book-cta a {
+            display: inline-block; background: white;
+            font-weight: 700; font-size: 14px;
+            padding: 11px 28px; border-radius: 50px;
+            text-decoration: none; transition: transform 0.2s;
+        }
+        .book-cta a:hover { transform: translateY(-2px); }
+
+        /* ══ SHARE ══ */
+        .share-box {
+            background: white; border-radius: 16px;
+            padding: 24px; text-align: center;
+            margin-top: 16px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        }
+        .share-box p { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+        .share-fb {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #1877F2; color: white;
+            font-weight: 600; font-size: 14px;
+            padding: 10px 22px; border-radius: 8px;
+            text-decoration: none; transition: opacity 0.2s;
+        }
+        .share-fb:hover { opacity: 0.88; }
+
+        /* ══ FOOTER ══ */
+        footer {
+            text-align: center; padding: 28px 20px;
+            font-size: 12px; color: var(--light);
+        }
+        footer a { color: var(--light); text-decoration: underline; }
+
+        /* ══ MOBILE ══ */
+        @media (max-width: 480px) {
+            .q-card, .gate-box, .profile-body { padding: 22px 16px; }
+            .profile-header { padding: 36px 18px 28px; }
+            .book-3d { width: 130px; height: 178px; }
+            .book-front { width: 130px; height: 178px; }
+            .book-spine { height: 178px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════ SCREEN 0 — WELCOME ════ -->
+<div id="screen-welcome" class="screen active">
+    <div class="welcome-badge">Test gratuito · 2 minuti</div>
+
+    <!-- 3D Book Mockup -->
+    <!-- QUANDO HAI LA COPERTINA: rimuovi il div .book-front-fallback e aggiungi
+         <img src="cover.jpg" alt="Finalmente Libera"> dentro .book-front -->
+    <div class="book-wrap">
+        <div class="book-3d">
+            <div class="book-front">
+                <div class="book-front-fallback">
+                    <div class="book-top-bar"><span>Cose da fare in pensione</span></div>
+                    <div class="book-title-area">
+                        <div class="book-num">125</div>
+                        <div class="book-num-label">attività</div>
+                        <div style="height:6px"></div>
+                        <div class="book-title-main">Finalmente<br>Libera</div>
+                        <div style="height:5px"></div>
+                        <div class="book-title-sub">per la pensionata curiosa,<br>ironica e finalmente libera</div>
+                    </div>
+                    <div class="book-author">Serena Venturi</div>
+                </div>
+            </div>
+            <div class="book-spine"></div>
+            <div class="book-shadow"></div>
+        </div>
+    </div>
+
+    <h1 class="welcome-h1">Che tipo di<br><em>pensionata</em> sei?</h1>
+    <p class="welcome-sub">7 domande per scoprire il tuo profilo e ricevere le idee perfette per la tua nuova stagione di libertà.</p>
+
+    <button class="btn-start" onclick="startQuiz()">Vai al quiz →</button>
+
+    <div class="welcome-meta">
+        <span>🕐 Solo 2 minuti</span>
+        <span>🎁 100% gratuito</span>
+        <span>🔒 Niente spam</span>
+    </div>
+</div>
+
+<!-- ════ SCREEN 1 — QUIZ ════ -->
+<div id="screen-quiz" class="screen">
+    <div class="quiz-header">
+        <div class="quiz-header-top">
+            <span class="quiz-brand">Finalmente Libera</span>
+            <span class="step-badge" id="step-badge">1 di 7</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width:14%"></div>
+        </div>
+    </div>
+    <div class="container anim">
+        <div id="question-container"></div>
+    </div>
+</div>
+
+<!-- ════ SCREEN 2 — EMAIL GATE ════ -->
+<div id="screen-gate" class="screen">
+    <div class="quiz-header">
+        <div class="quiz-header-top">
+            <span class="quiz-brand">Finalmente Libera</span>
+            <span class="step-badge">Completato! 🎉</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width:100%"></div>
+        </div>
+    </div>
+    <div class="container anim">
+        <div class="gate-box">
+            <div class="gate-emoji">🎉</div>
+            <h2>Hai finito!<br>Il tuo profilo è pronto.</h2>
+            <p>Inserisci nome e email: scopri subito chi sei e ricevi le tue idee personalizzate direttamente in casella.</p>
+            <form class="email-form" onsubmit="submitEmail(event)">
+                <input type="text"  id="user-name"  placeholder="Il tuo nome" required autocomplete="given-name">
+                <input type="email" id="user-email" placeholder="La tua email" required autocomplete="email">
+                <button type="submit" class="btn-submit">Scopri il mio profilo →</button>
+            </form>
+            <p class="privacy">🔒 Niente spam. Solo cose belle, promesso.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ════ SCREEN 3 — RESULT ════ -->
+<div id="screen-result" class="screen">
+    <div class="container anim">
+        <div id="profile-card-container"></div>
+        <div class="share-box">
+            <p>Hai scoperto il tuo profilo? Condividilo con le amiche! 😄</p>
+            <a class="share-fb" id="share-fb-btn" href="#" target="_blank" rel="noopener">
+                📘 Condividi su Facebook
+            </a>
+        </div>
+    </div>
+    <footer>
+        <p><strong>Finalmente Libera</strong> — 125 Cose da Fare in Pensione per Donne</p>
+        <p style="margin-top:6px"><a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Cancella iscrizione</a></p>
+    </footer>
+</div>
+
+<script>
+// ──────────────────────────────────────────
+// CONFIGURAZIONE
+// ──────────────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzhshyEah-MoyHC-2PXazF7DyrsJKArDDxeYrj_ut0nedzgdKFbJ7zwZduxuXxzrtD/exec';
+const AMAZON_URL = 'https://www.amazon.it/dp/INSERISCI_ASIN_QUI'; // aggiorna dopo KDP
+
+// ──────────────────────────────────────────
+// DOMANDE
+// ──────────────────────────────────────────
+const questions = [
+    {
+        emoji: '☀️',
+        text: 'La tua mattina ideale in pensione inizia con...',
+        options: [
+            { text: 'Una passeggiata nel parco o una sessione di yoga all\'alba', p: 'V' },
+            { text: 'Un caffè, poi dritto al mio progetto creativo', p: 'C' },
+            { text: 'Guardare la mappa di un posto che voglio visitare presto', p: 'A' },
+            { text: 'Chiamare un\'amica per organizzare qualcosa insieme', p: 'K' },
+            { text: 'Silenzio, un libro e nessuna sveglia', p: 'Z' }
+        ]
+    },
+    {
+        emoji: '🌅',
+        text: 'Il tuo weekend perfetto include...',
+        options: [
+            { text: 'Almeno due ore di movimento all\'aria aperta', p: 'V' },
+            { text: 'Creare qualcosa — cucire, dipingere, cucinare qualcosa di nuovo', p: 'C' },
+            { text: 'Esplorare un posto che non ho mai visto', p: 'A' },
+            { text: 'Un pranzo o aperitivo con persone care', p: 'K' },
+            { text: 'Tempo solo mio, senza dover spiegare dove sono', p: 'Z' }
+        ]
+    },
+    {
+        emoji: '🎯',
+        text: 'La tua pensione ideale è soprattutto...',
+        options: [
+            { text: 'Finalmente tempo per prendermi cura del corpo come merito', p: 'V' },
+            { text: 'Il mio studio personale, sempre aperto', p: 'C' },
+            { text: 'Un biglietto aperto per il mondo (anche quello vicino!)', p: 'A' },
+            { text: 'Una rete di affetti da coltivare ogni giorno', p: 'K' },
+            { text: 'Un respiro lungo dopo una vita di rumore', p: 'Z' }
+        ]
+    },
+    {
+        emoji: '📚',
+        text: 'Se entri in una libreria, finisci sempre nella sezione...',
+        options: [
+            { text: 'Benessere, salute, corpo — yoga, alimentazione', p: 'V' },
+            { text: 'Creatività, cucina, arte, fai da te', p: 'C' },
+            { text: 'Viaggi, storia, paesi lontani', p: 'A' },
+            { text: 'Romanzi con personaggi veri e intensi', p: 'K' },
+            { text: 'Filosofia, meditazione, narrativa lenta', p: 'Z' }
+        ]
+    },
+    {
+        emoji: '✨',
+        text: 'A fine giornata dici "che bella giornata!" se...',
+        options: [
+            { text: 'Ho mosso il corpo e mi sento in forma', p: 'V' },
+            { text: 'Ho finito (o iniziato!) qualcosa che mi rende orgogliosa', p: 'C' },
+            { text: 'Ho visto qualcosa che non avevo mai visto', p: 'A' },
+            { text: 'Ho fatto sorridere qualcuna', p: 'K' },
+            { text: 'Ho avuto un momento tutto mio, senza interruzioni', p: 'Z' }
+        ]
+    },
+    {
+        emoji: '💼',
+        text: 'Cosa NON ti manca affatto del lavoro?',
+        options: [
+            { text: 'La sedentarietà — adesso mi muovo davvero', p: 'V' },
+            { text: 'Non poter scegliere i miei progetti', p: 'C' },
+            { text: 'Stare sempre nello stesso posto', p: 'A' },
+            { text: 'I colleghi difficili — le amiche vere, quelle no!', p: 'K' },
+            { text: 'Il rumore e il ritmo imposto da altri', p: 'Z' }
+        ]
+    },
+    {
+        emoji: '🦸‍♀️',
+        text: 'Se potessi scegliere un superpotere, saresti...',
+        options: [
+            { text: 'L\'atleta: energia infinita e corpo sempre pronto', p: 'V' },
+            { text: 'L\'artista: trasformi qualsiasi cosa in bellezza', p: 'C' },
+            { text: 'L\'esploratrice: nessun posto è troppo lontano', p: 'A' },
+            { text: 'La connettrice: riunisci sempre le persone giuste', p: 'K' },
+            { text: 'La sage: la saggezza silenziosa che tutti cercano', p: 'Z' }
+        ]
+    }
+];
+
+// ──────────────────────────────────────────
+// PROFILI
+// ──────────────────────────────────────────
+const profiles = {
+    V: {
+        name: 'La Vitalista', emoji: '🌿', tagline: 'Ti muovi, quindi sei.',
+        color: '#3D9E6A', colorCta: '#2E7A52',
+        desc: 'Il tuo corpo sa già che la pensione non significa fermarsi — anzi. Yoga, passeggiate veloci, danza: non come routine obbligatoria, ma perché ti fa sentire viva. Hai un\'energia che molte 30enni si sognano, e finalmente puoi usarla tutta per te, nei tuoi tempi.',
+        ideas: [
+            { icon: '🚶‍♀️', text: 'Camminata nordica al parco — gratis, rigenerante e sociale (Idea #3)' },
+            { icon: '💃', text: 'Corso di ballo in stile anni \'70 — ottimo per corpo e risate (Idea #7)' },
+            { icon: '🧘‍♀️', text: 'Yoga del mattino a ritmo tuo — 20 minuti cambiano la giornata (Idea #1)' }
+        ]
+    },
+    C: {
+        name: 'La Creativa', emoji: '🎨', tagline: 'Fai cose belle, quindi sei.',
+        color: '#C4873A', colorCta: '#A06A22',
+        desc: 'Hai le mani che pensano da sole. Cucire, dipingere, creare qualcosa dal niente — è il tuo modo autentico di stare nel mondo. La pensione è il tuo studio personale, finalmente aperto 24/7 senza orari, senza riunioni, senza nessuno che ti dice cosa fare.',
+        ideas: [
+            { icon: '🏺', text: 'Laboratorio di ceramica "senza Instagram" — tocca, crea, sbaglia (Idea #27)' },
+            { icon: '🧶', text: 'Ricamo o uncinetto: il ritmo lento che calma meglio di tutto (Idea #31)' },
+            { icon: '🖌️', text: 'Acquerello per principianti — sbagliare è parte del quadro (Idea #33)' }
+        ]
+    },
+    A: {
+        name: 'L\'Avventuriera', emoji: '🌍', tagline: 'Esplori, quindi sei.',
+        color: '#3A6FD4', colorCta: '#2A55AA',
+        desc: 'La mappa ti chiama — e non deve essere lontano. Un borgo mai visitato, un mercato nuovo, un museo rimandato da vent\'anni. Per te ogni giornata può essere una piccola scoperta, e la pensione è finalmente il momento in cui le mappe si aprono davvero senza scuse.',
+        ideas: [
+            { icon: '🗺️', text: 'Gita in un borgo medievale — guida cartacea, zero GPS (Idea #51)' },
+            { icon: '🎭', text: 'Visita guidata in incognito — senza dirlo in anticipo a nessuno (Idea #58)' },
+            { icon: '🚂', text: 'Weekend in treno verso una città mai vista (Idea #63)' }
+        ]
+    },
+    K: {
+        name: 'La Connettrice', emoji: '💬', tagline: 'Connetti, quindi sei.',
+        color: '#CC3311', colorCta: '#A82A0D',
+        desc: 'La tua energia arriva dalle persone. Un caffè con le amiche, una telefonata inaspettata, un gesto di gentilezza verso qualcuna. Sei il collante del tuo mondo, e in pensione puoi finalmente scegliere chi far entrare nella tua cerchia — senza compromessi né colleghe difficili.',
+        ideas: [
+            { icon: '☕', text: 'Caffè rotativo tra amiche — ogni volta a casa di una diversa (Idea #76)' },
+            { icon: '🤝', text: 'Volontariato "una volta al mese" — prova senza impegni fissi (Idea #82)' },
+            { icon: '🍽️', text: 'Cena a tema vintage con le solite note (Idea #99)' }
+        ]
+    },
+    Z: {
+        name: 'La Contemplativa', emoji: '🕊️', tagline: 'Ti fermi, quindi sei.',
+        color: '#7A5FD4', colorCta: '#5E44B0',
+        desc: 'Hai aspettato una vita per stare ferma senza sensi di colpa. Leggere, meditare, guardare fuori dalla finestra con un tè caldo — per te è un lusso meritato, non pigrizia. Hai una saggezza silenziosa rara, e finalmente puoi darle tutto lo spazio che merita.',
+        ideas: [
+            { icon: '📖', text: 'Lettura come quando si andava in edicola — senza notifiche (Idea #101)' },
+            { icon: '🧘‍♀️', text: 'Meditazione guidata 5 minuti: bastano, davvero (Idea #107)' },
+            { icon: '✍️', text: 'Journaling "senza regole" — scrivi quello che vuoi (Idea #115)' }
+        ]
+    }
+};
+
+// ──────────────────────────────────────────
+// STATO
+// ──────────────────────────────────────────
+let currentQ = 0;
+let scores = { V: 0, C: 0, A: 0, K: 0, Z: 0 };
+let selected = null;
+let resultKey = null;
+
+// ──────────────────────────────────────────
+// NAVIGAZIONE
+// ──────────────────────────────────────────
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ──────────────────────────────────────────
+// QUIZ
+// ──────────────────────────────────────────
+function startQuiz() {
+    renderQuestion();
+    showScreen('screen-quiz');
+}
+
+function renderQuestion() {
+    const q = questions[currentQ];
+    const total = questions.length;
+    const pct = Math.round(((currentQ + 1) / total) * 100);
+    const letters = ['A','B','C','D','E'];
+
+    document.getElementById('step-badge').textContent = (currentQ + 1) + ' di ' + total;
+    document.getElementById('progress-fill').style.width = pct + '%';
+
+    const opts = q.options.map((o, i) =>
+        '<button class="option" onclick="pick(' + i + ',\'' + o.p + '\')">' +
+        '<span class="opt-letter">' + letters[i] + '</span>' + o.text +
+        '</button>'
+    ).join('');
+
+    document.getElementById('question-container').innerHTML =
+        '<div class="q-card">' +
+        '<div class="q-emoji">' + q.emoji + '</div>' +
+        '<div class="q-num">Domanda ' + (currentQ + 1) + '</div>' +
+        '<div class="q-text">' + q.text + '</div>' +
+        '<div class="options">' + opts + '</div>' +
+        '<button class="next-btn" id="next-btn" onclick="advance()">' +
+        (currentQ < total - 1 ? 'Prossima domanda →' : 'Vedi il mio profilo! 🎉') +
+        '</button></div>';
+    selected = null;
+}
+
+function pick(idx, profile) {
+    document.querySelectorAll('.option').forEach(function(el) { el.classList.remove('selected'); });
+    document.querySelectorAll('.option')[idx].classList.add('selected');
+    selected = profile;
+    var btn = document.getElementById('next-btn');
+    btn.style.display = 'block';
+    setTimeout(function() { btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+}
+
+function advance() {
+    if (!selected) return;
+    scores[selected]++;
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        showScreen('screen-gate');
+    }
+}
+
+// ──────────────────────────────────────────
+// EMAIL
+// ──────────────────────────────────────────
+function topProfile() {
+    return Object.entries(scores).sort(function(a, b) { return b[1] - a[1]; })[0][0];
+}
+
+function submitEmail(e) {
+    e.preventDefault();
+    var name  = document.getElementById('user-name').value.trim();
+    var email = document.getElementById('user-email').value.trim();
+    resultKey = topProfile();
+    showResult(name);
+    fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: name, email: email,
+            profile: resultKey,
+            profileName: profiles[resultKey].name,
+            scores: scores,
+            timestamp: new Date().toISOString()
+        })
+    }).catch(function() {});
+}
+
+// ──────────────────────────────────────────
+// RISULTATO
+// ──────────────────────────────────────────
+function showResult(name) {
+    showScreen('screen-result');
+    var p = profiles[resultKey];
+    var youLabel = name ? name + ', sei' : 'Sei';
+
+    var ideasHtml = p.ideas.map(function(idea) {
+        return '<div class="idea-row"><span class="i-icon">' + idea.icon + '</span><span>' + idea.text + '</span></div>';
+    }).join('');
+
+    document.getElementById('profile-card-container').innerHTML =
+        '<div class="profile-card">' +
+        '<div class="profile-header" style="background: linear-gradient(145deg, ' + p.color + ', ' + p.colorCta + ');">' +
+        '<div class="p-emoji">' + p.emoji + '</div>' +
+        '<div class="p-you">' + youLabel + '</div>' +
+        '<div class="p-name">' + p.name + '</div>' +
+        '<div class="p-tagline">' + p.tagline + '</div>' +
+        '</div>' +
+        '<div class="profile-body">' +
+        '<p class="p-desc">' + p.desc + '</p>' +
+        '<div class="p-ideas-label">3 idee perfette per te</div>' +
+        '<div class="ideas-list">' + ideasHtml + '</div>' +
+        '<div class="book-cta" style="background: linear-gradient(135deg, ' + p.color + ', ' + p.colorCta + ');">' +
+        '<p>Le altre 122 idee sono nel libro — tutte pensate per te.</p>' +
+        '<a href="' + AMAZON_URL + '" target="_blank" rel="noopener" style="color:' + p.color + '">Scopri il libro su Amazon →</a>' +
+        '</div></div></div>';
+
+    var shareText = encodeURIComponent('Ho scoperto che sono "' + p.name + '" — ' + p.tagline + '\nFai anche tu il test! 🌸');
+    var shareUrl  = encodeURIComponent(window.location.href);
+    document.getElementById('share-fb-btn').href =
+        'https://www.facebook.com/sharer/sharer.php?u=' + shareUrl + '&quote=' + shareText;
+}
+</script>
+
+</body>
+</html>
